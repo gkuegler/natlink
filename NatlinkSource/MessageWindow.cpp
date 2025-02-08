@@ -41,6 +41,9 @@
 // The color for error messages
 #define DARKRED RGB( 128, 0, 0 )
 
+// Startup window display state.
+#define GUI_DEFAULT_SHOW_STATE SW_SHOWMINIMIZED
+
 //---------------------------------------------------------------------------
 // Called when a message is sent to the dialog box.  Return FALSE to tell
 // the dialog box default window message handler to process the message.
@@ -63,7 +66,7 @@ INT_PTR CALLBACK dialogProc(
 		s_pSecdThrd = (MessageWindow *)lParam;
 
 		// hide the window to start with
-		ShowWindow( hWnd, SW_HIDE );
+		ShowWindow( hWnd, GUI_DEFAULT_SHOW_STATE );
 		return TRUE;
 
 	 case WM_UPDATEWINDOW:
@@ -147,7 +150,9 @@ INT_PTR CALLBACK dialogProc(
 		{
 			char * pszText = (char *)lParam;
 
+			#if GUI_SHOW_ON_TEXT
 			ShowWindow( hWnd, SW_SHOW );
+			#endif
 
 			CHARFORMAT chForm;
 			chForm.cbSize = sizeof(chForm);
