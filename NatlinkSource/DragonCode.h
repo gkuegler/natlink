@@ -91,6 +91,8 @@ class CDragonCode
 	BOOL setWordInfo( char * wordName, DWORD wordInfo );
 	BOOL setTrayIcon( char * iconName, char * toolTip, PyObject * pCallback );
 	BOOL setMessageWindow( PyObject * pCallback, DWORD dwflags = 0 );
+	BOOL setMessageWindowPosition( int x, int y );
+	BOOL setMessageWindowSize( int width, int height );
 
 	PyObject * getCurrentModule();
 	PyObject * getCurrentUser();

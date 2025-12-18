@@ -573,7 +573,7 @@ waitForSpeech( timeout )
     returns when the timeout elapses).
 
 setMessageWindow( callback, flags )
-    This function enables, disables and updates Natlink's message window.
+    This function enables, disables and updates Natlink's output message window.
 
     The function has one required parameter whose value should be a Python
     function or None.  If a function is passed for this parameter, it

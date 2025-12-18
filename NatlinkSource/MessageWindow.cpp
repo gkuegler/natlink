@@ -66,6 +66,7 @@ INT_PTR CALLBACK dialogProc(
 		s_pSecdThrd = (MessageWindow *)lParam;
 
 		// hide the window to start with
+		SetWindowPos( hWnd, 0, 60, 60, 1300, 900, SWP_NOZORDER);
 		ShowWindow( hWnd, GUI_DEFAULT_SHOW_STATE );
 		return TRUE;
 
@@ -150,9 +151,7 @@ INT_PTR CALLBACK dialogProc(
 		{
 			char * pszText = (char *)lParam;
 
-			#if GUI_SHOW_ON_TEXT
 			ShowWindow( hWnd, SW_SHOW );
-			#endif
 
 			CHARFORMAT chForm;
 			chForm.cbSize = sizeof(chForm);
@@ -184,7 +183,7 @@ INT_PTR CALLBACK dialogProc(
 			//SendMessage( hEdit, EM_SETSEL, 0x7FFF, 0x7FFF );
 			SendMessage( hEdit, EM_SCROLLCARET, 0, 0 );
 			if ( pszText )
-				delete pszText;
+				free(pszText);
 		}
 		return TRUE;
 
@@ -306,5 +305,36 @@ void MessageWindow::updateWindow( DWORD dwFlags )
 	if( m_hOutWnd )
 	{
 		PostMessage( m_hOutWnd, WM_UPDATEWINDOW, dwFlags, 0 );
+	}
+}
+
+//---------------------------------------------------------------------------
+
+BOOL MessageWindow::setWindowPosition( int x, int y )
+{
+	if( m_hOutWnd )
+	{
+		// Use async flag when calling thread has a different input queue.
+		UINT flags = SWP_ASYNCWINDOWPOS | SWP_NOZORDER | SWP_NOSIZE;
+		return SetWindowPos( m_hOutWnd, 0, x, y, 0, 0, flags );
+	}
+	return FALSE;
+}
+
+//---------------------------------------------------------------------------
+
+BOOL MessageWindow::setWindowSize( int width, int height )
+{
+	if( m_hOutWnd )
+	{
+		// Use async flag when calling thread has a different input queue.
+		UINT flags = SWP_ASYNCWINDOWPOS | SWP_NOZORDER | SWP_NOMOVE;
+		bool rslt = SetWindowPos( m_hOutWnd, 0, 0, 0, width, height, flags );
+		if (rslt == 0 ) {
+			int gle = GetLastError();
+			displayText("setWindowSize Failed with error code: %d", gle);
+			return FALSE;
+		}
+		return TRUE;
 	}
 }

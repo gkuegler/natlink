@@ -569,6 +569,8 @@ BOOL CDragonCode::IsMessageTriggered(
 //
 
 //---------------------------------------------------------------------------
+// Window procedure to send messages to CDragonCode from other threads.
+// No actual window is shown, but a window is required to use the Win32 message api.
 // Note when a posted message comes in, the Python interpreter should be
 // unlocked so we first have to establish a thread state and lock the
 // interpreter.
@@ -582,6 +584,10 @@ LRESULT CALLBACK hiddenWndProc(
 	{
 	 case WM_COMMAND:
 		// menu command, posted from second thread
+
+		// Process menue events from the output message window. The output message
+		// window is not the main thread, because the main thread is run by DNS as a
+		// compatibility module. The output message window would not be able to easily call into CDragonCode.????
 		pDragCode = (CDragonCode *)GetWindowLong( hwnd, 0 );
 		pDragCode->logMessage("+ hiddenWndProc WM_COMMAND\n");
 		if( pDragCode )
@@ -3747,6 +3753,31 @@ BOOL CDragonCode::setMessageWindow(
 	}
 
 	return TRUE;
+}
+
+//---------------------------------------------------------------------------
+
+BOOL CDragonCode::setMessageWindowPosition( int x, int y )
+{
+	if( m_pSecdThrd )
+	{
+		BOOL rslt = m_pSecdThrd->setWindowPosition( x, y );
+		m_pSecdThrd->displayText("successfully called 'displayText'", FALSE);
+		return rslt;
+		
+	}
+	return FALSE;
+}
+
+//---------------------------------------------------------------------------
+
+BOOL CDragonCode::setMessageWindowSize( int width, int height )
+{
+	if( m_pSecdThrd )
+	{
+		return m_pSecdThrd->setWindowSize( width, height );
+	}
+	return FALSE;
 }
 
 //---------------------------------------------------------------------------

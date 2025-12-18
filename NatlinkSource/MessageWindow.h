@@ -26,6 +26,12 @@ class MessageWindow
 	// this will update the output window
 	void updateWindow( DWORD dwFlags );
 
+	// Set the window position.
+	BOOL setWindowPosition( int x, int y );
+
+	// Set the window size.
+	BOOL setWindowSize( int width, int height );
+
 	// these are called from the second thread itself
 	void setOutWnd( HWND hWnd ) { m_hOutWnd = hWnd; }
 	void signalEvent() { SetEvent( m_hEvent ); }

@@ -1228,6 +1228,57 @@ natlink_setMessageWindow( PyObject *self, PyObject *args )
 	return Py_None;
 }
 
+//---------------------------------------------------------------------------
+// natlink.setMessageWindowPosition( callback, flags )
+
+extern "C" static PyObject *
+natlink_setMessageWindowPosition( PyObject *self, PyObject *args )
+{
+	int x, y;
+
+	if( !PyArg_ParseTuple( args, "ii:setMessageWindowPosition", &x, &y) )
+	{
+		return NULL;
+	}
+
+	if( cDragon.setMessageWindowPosition( x, y ) )
+	{
+		Py_INCREF( Py_True );
+		return Py_True;
+	}
+	else
+	{
+		Py_INCREF( Py_False );
+		return Py_False;
+	}
+
+}
+
+//---------------------------------------------------------------------------
+// natlink.setMessageWindowSize( callback, flags )
+
+extern "C" static PyObject *
+natlink_setMessageWindowSize( PyObject *self, PyObject *args )
+{
+	int width, height;
+
+	if( !PyArg_ParseTuple( args, "ii:setMessageWindowSize", &width, &height) )
+	{
+		return NULL;
+	}
+
+	if( cDragon.setMessageWindowSize( width, height ) )
+	{
+    	Py_INCREF( Py_True );
+		return Py_True;
+	}
+	else
+	{
+		Py_INCREF( Py_False );
+		return Py_False;
+	}
+}
+
 /////////////////////////////////////////////////////////////////////////////
 
 //---------------------------------------------------------------------------
@@ -2349,6 +2400,8 @@ static struct PyMethodDef natlink_methods[] = {
 	{ "getWordProns", natlink_getWordProns, METH_VARARGS },
 	{ "setTrayIcon", natlink_setTrayIcon, METH_VARARGS },
 	{ "setMessageWindow", natlink_setMessageWindow, METH_VARARGS },
+	{ "setMessageWindowPosition", natlink_setMessageWindowPosition, METH_VARARGS },
+	{ "setMessageWindowSize", natlink_setMessageWindowSize, METH_VARARGS },
 	{ NULL }
 };
 
